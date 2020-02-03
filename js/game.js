@@ -66,16 +66,31 @@ hurdle.position.z = -500;
 hurdle.position.y = person.geometry.parameters.height / 2;
 scene.add(hurdle);
 
+//text 
+var text2 = document.createElement('a');
+text2.style.position = 'absolute';
+text2.innerHTML = "Press ENTER to start!";
+text2.style.fontSize = 50 + "px";
+text2.style.top = 50 + '%';
+text2.style.left = 40 + '%';
+document.body.appendChild(text2);
 
+//Variablen
+var gameStarted = false;
 
 //game logic
 var update = function(){
-    //person.rotation.x += 0.01;
-    //person.rotation.y += 0.01;
-    person.position.z -= 1;
-    camera.position.z -= 1;
-    //camera.rotation.x += 0.1;
-    detectCollisionCubes(person, hurdle);
+    if(gameStarted){
+        person.position.z -= 1;
+        camera.position.z -= 1;
+    }
+
+    if(detectCollisionCubes(person, hurdle)){
+        gameStarted = false;
+        document.body.appendChild(text2);
+        person.position.z = 0;
+        camera.position.z = 9;
+    }
 };
 
 //draw scene
@@ -102,7 +117,25 @@ document.addEventListener("keydown", event => {
             person.position.x += 2;
         }
     }
+    if(event.key === "Enter"){
+        if(document.body.removeChild(text2)){
+
+        };
+        gameStarted = true;
+    }
   });
+
+document.addEventListener('touchstart', event => {
+    if(gameStarted === true){
+        if(event.touches[0].clientX < window.outerWidth && person.position.x > -10){
+            person.position.x -= 2;
+        }else{
+            person.position.x += 2;
+        }
+    }
+    document.body.removeChild(text2);
+    gameStarted = true;
+},false);
 
 GameLoop();
 
@@ -120,5 +153,5 @@ function detectCollisionCubes(object1, object2){
     var box2 = object2.geometry.boundingBox.clone();
     box2.applyMatrix4(object2.matrixWorld);
 
-    return console.log(box1.intersectsBox(box2));
+    return box1.intersectsBox(box2);
   }
