@@ -1,6 +1,6 @@
 var scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff);
-scene.fog = new THREE.Fog(0xffffff, 0, 750);
+scene.fog = new THREE.Fog(0xffffff, 0, 200);
 
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 camera.position.x = -1.2;
@@ -59,10 +59,20 @@ person.position.y = person.geometry.parameters.height / 2;
 scene.add(person);
 
 //create hurdle
-var geometry = new THREE.BoxGeometry(8, 4, 2);
+var geometry = new THREE.BoxGeometry(4, 2, 2);
 var material = new THREE.MeshLambertMaterial( { color: 0xff0000, wireframe: false } );
+
+var materialblue = new THREE.MeshLambertMaterial( { color: 0x0000ff, wireframe: false } );
+for(var i = 1;i<1000; i++){
+    var hurdle = new THREE.Mesh(geometry, materialblue);
+    hurdle.position.x = Math.random() * 40 - 20;
+    hurdle.position.y = person.geometry.parameters.height / 2;
+    hurdle.position.z = - i * 10;
+    scene.add(hurdle);
+}
+
 var hurdle = new THREE.Mesh(geometry, material);
-hurdle.position.z = -500;
+hurdle.position.z = -200;
 hurdle.position.y = person.geometry.parameters.height / 2;
 scene.add(hurdle);
 
@@ -92,14 +102,16 @@ var update = function(){
         person.position.z -= 1;
         camera.position.z -= 1;
     }
-
     if(detectCollisionCubes(person, hurdle)){
         gameStarted = false;
         soundLoose.play();
-        soundLoose.onended = () => { soundHaha.play(); }
-        document.body.appendChild(text2);
-        person.position.z = 0;
-        camera.position.z = 9;
+        soundLoose.onended = () => { 
+            soundHaha.play(); 
+            document.body.appendChild(text2);
+            person.position.z = 0;
+            camera.position.z = 9;
+        }
+        
     }
 };
 
