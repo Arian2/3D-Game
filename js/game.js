@@ -75,6 +75,14 @@ text2.style.top = 50 + '%';
 text2.style.left = 40 + '%';
 document.body.appendChild(text2);
 
+//sound
+var soundLoose = new Audio("sound/loose.mp3");
+soundLoose.volume = 0.7;
+
+var soundHaha = new Audio("sound/haha.mp3");
+soundHaha.volume = 0.7;
+
+
 //Variablen
 var gameStarted = false;
 
@@ -87,6 +95,8 @@ var update = function(){
 
     if(detectCollisionCubes(person, hurdle)){
         gameStarted = false;
+        soundLoose.play();
+        soundLoose.onended = () => { soundHaha.play(); }
         document.body.appendChild(text2);
         person.position.z = 0;
         camera.position.z = 9;
