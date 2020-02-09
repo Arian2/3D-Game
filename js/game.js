@@ -91,7 +91,7 @@ textscore.style.position = 'absolute';
 textscore.innerHTML = score;
 textscore.style.fontSize = 30 + "px";
 textscore.style.top = 10 + 'px';
-textscore.style.left = 10 + 'px';
+textscore.style.right = 2 + '%';
 document.body.appendChild(textscore);
 
 //sound
