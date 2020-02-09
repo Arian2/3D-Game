@@ -139,7 +139,7 @@ document.addEventListener("keydown", event => {
             person.position.x += 2;
         }
     }
-    if(event.key === "Enter"){
+    if(event.key === "Enter" || event.key === " "){
         if(document.body.removeChild(text2)){
 
         };
