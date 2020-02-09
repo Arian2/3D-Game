@@ -63,7 +63,7 @@ var geometry = new THREE.BoxGeometry(4, 2, 2);
 var material = new THREE.MeshLambertMaterial( { color: 0xff0000, wireframe: false } );
 
 var materialblue = new THREE.MeshLambertMaterial( { color: 0x0000ff, wireframe: false } );
-for(var i = 1;i<1000; i++){
+for(var i = 5;i<1000; i++){
     var hurdle = new THREE.Mesh(geometry, materialblue);
     hurdle.position.x = Math.random() * 40 - 20;
     hurdle.position.y = person.geometry.parameters.height / 2;
@@ -76,7 +76,7 @@ hurdle.position.z = -200;
 hurdle.position.y = person.geometry.parameters.height / 2;
 scene.add(hurdle);
 
-//text 
+//text start
 var text2 = document.createElement('a');
 text2.style.position = 'absolute';
 text2.innerHTML = "Press ENTER to start!";
@@ -84,6 +84,15 @@ text2.style.fontSize = 50 + "px";
 text2.style.top = 50 + '%';
 text2.style.left = 40 + '%';
 document.body.appendChild(text2);
+//text score
+var score = 0;
+var textscore = document.createElement('a');
+textscore.style.position = 'absolute';
+textscore.innerHTML = score;
+textscore.style.fontSize = 30 + "px";
+textscore.style.top = 10 + 'px';
+textscore.style.left = 10 + 'px';
+document.body.appendChild(textscore);
 
 //sound
 var soundLoose = new Audio("sound/loose.mp3");
@@ -99,6 +108,8 @@ var gameStarted = false;
 //game logic
 var update = function(){
     if(gameStarted){
+        score += 10;
+        textscore.innerHTML = score;
         person.position.z -= 1;
         camera.position.z -= 1;
     }
@@ -108,6 +119,8 @@ var update = function(){
         soundLoose.onended = () => { 
             soundHaha.play(); 
             document.body.appendChild(text2);
+            score = 0;
+            textscore.innerHTML = score;
             person.position.z = 0;
             camera.position.z = 9;
         }
