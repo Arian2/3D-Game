@@ -121,6 +121,8 @@ var update = function(){
     }
     if(detectCollisionCubes(person, hurdle)){
         gameStarted = false;
+        soundLoose.autoplay = true;
+        soundLoose.loop = true;
         soundLoose.play();
         soundLoose.onended = () => { 
             soundHaha.play(); 
@@ -192,7 +194,7 @@ document.addEventListener("keydown", event => {
 
   });
 
-document.addEventListener('touchstart', event => {
+document.addEventListener('touchmove', event => {
     if(gameStarted === true){
         if(event.touches[0].clientX < window.outerWidth && person.position.x > -5){
             goingLeft = true;
