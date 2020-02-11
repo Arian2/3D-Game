@@ -51,7 +51,7 @@ floor = new THREE.Mesh( geo, mat);
 scene.add(floor);
 
 
-//create person who have to dodge
+//create person who has to dodge
 var geometry = new THREE.BoxGeometry(2, 2, 2);
 var material = new THREE.MeshLambertMaterial( { color: 0x00ff00, wireframe: false } );
 var person = new THREE.Mesh(geometry, material);
@@ -62,19 +62,15 @@ scene.add(person);
 var geometry = new THREE.BoxGeometry(4, 2, 2);
 var material = new THREE.MeshLambertMaterial( { color: 0xff0000, wireframe: false } );
 
-var materialblue = new THREE.MeshLambertMaterial( { color: 0x0000ff, wireframe: false } );
+var hurdles = [];
 for(var i = 5;i<1000; i++){
-    var hurdle = new THREE.Mesh(geometry, materialblue);
+    var hurdle = new THREE.Mesh(geometry, material);
     hurdle.position.x = Math.random() * 40 - 20;
     hurdle.position.y = person.geometry.parameters.height / 2;
     hurdle.position.z = - i * 10;
+    hurdles.push(hurdle);
     scene.add(hurdle);
 }
-
-var hurdle = new THREE.Mesh(geometry, material);
-hurdle.position.z = -200;
-hurdle.position.y = person.geometry.parameters.height / 2;
-scene.add(hurdle);
 
 //text start
 var text2 = document.createElement('a');
@@ -104,6 +100,9 @@ soundHaha.volume = 0.7;
 
 //Variablen
 var gameStarted = false;
+var speed = 0.3;
+var goingLeft = false;
+var goingRight = false;
 
 //game logic
 var update = function(){
@@ -112,6 +111,13 @@ var update = function(){
         textscore.innerHTML = score;
         person.position.z -= 1;
         camera.position.z -= 1;
+
+        if(goingLeft){
+            person.position.x -= speed;
+        }
+        if(goingRight){
+            person.position.x += speed;
+        }
     }
     if(detectCollisionCubes(person, hurdle)){
         gameStarted = false;
@@ -124,8 +130,21 @@ var update = function(){
             person.position.z = 0;
             camera.position.z = 9;
         }
-        
     }
+    hurdles.forEach(hurdle => {
+        if(detectCollisionCubes(person, hurdle)){
+            gameStarted = false;
+            soundLoose.play();
+            soundLoose.onended = () => { 
+                soundHaha.play(); 
+                document.body.appendChild(text2);
+                score = 0;
+                textscore.innerHTML = score;
+                person.position.z = 0;
+                camera.position.z = 9;
+            }
+        }
+    });
 };
 
 //draw scene
@@ -144,12 +163,16 @@ var GameLoop = function(){
 document.addEventListener("keydown", event => {
     if (event.key === "ArrowLeft") {
         if(person.position.x > -10){
-            person.position.x -= 2;
-        }
+            goingLeft = true;
+        }else{
+            goingLeft = false;
+        } 
     }
     if(event.key === "ArrowRight"){
         if(person.position.x < 10){
-            person.position.x += 2;
+            goingRight = true;
+        }else{
+            goingRight = false;
         }
     }
     if(event.key === "Enter" || event.key === " "){
@@ -158,6 +181,15 @@ document.addEventListener("keydown", event => {
         };
         gameStarted = true;
     }
+  });
+  document.addEventListener("keyup", event => {
+    if (event.key === "ArrowLeft") {
+        goingLeft = false;
+    }
+    if(event.key === "ArrowRight"){
+        goingRight = false;
+    }
+
   });
 
 document.addEventListener('touchstart', event => {
