@@ -104,24 +104,7 @@ var gameStarted = false;
 var speed = 0.3;
 var goingLeft = false;
 var goingRight = false;
-
-//button start
-var button = document.createElement('button');
-button.type="button";
-button.innerText = "START";
-button.style.position = "absolute";
-button.style.top = 0 + '%';
-button.style.left = 0 + '%';
-button.style.zIndex = 10;
-button.style.width = "100%"
-button.style.height = "100%"
-button.style.fontSize = "200px"
-button.onclick = function(){
-    gameStarted = true;
-    button.hidden = true;
-}
-
-document.body.appendChild(button);
+var countTriedAudioPlay = 0;
 
 //game logic
 var update = function(){
@@ -141,9 +124,18 @@ var update = function(){
     hurdles.forEach(hurdle => {
         if(detectCollisionCubes(person, hurdle)){
             gameStarted = false;
+            countTriedAudioPlay++;
+            if(countTriedAudioPlay>=2){
+                text2.style.zIndex = "1";
+                score = 0;
+                textscore.innerHTML = score;
+                person.position.z = 0;
+                camera.position.z = 9;
+            }
             soundLoose.play();
             soundLoose.onended = () => { 
                 soundHaha.play(); 
+                countTriedAudioPlay=0
                 text2.style.zIndex = "1";
                 score = 0;
                 textscore.innerHTML = score;
