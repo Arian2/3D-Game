@@ -194,14 +194,26 @@ document.addEventListener("keydown", event => {
 
 document.addEventListener('touchstart', event => {
     if(gameStarted === true){
-        if(event.touches[0].clientX < window.outerWidth && person.position.x > -10){
-            person.position.x -= 2;
+        if(event.touches[0].clientX < window.outerWidth && person.position.x > -5){
+            goingLeft = true;
         }else{
-            person.position.x += 2;
+            goingLeft = false;
         }
+        if(event.touches[0].clientX > window.outerWidth && person.position.x < 5){
+            goingRight = true;
+        }else{
+            goingRight = false;
+        }
+    }else{
+        document.body.removeChild(text2);
+        gameStarted = true;
     }
-    document.body.removeChild(text2);
-    gameStarted = true;
+},false);
+document.addEventListener('touchend', event => {
+    if(gameStarted === true){
+        goingLeft = false;
+        goingRight = false;
+    }
 },false);
 
 GameLoop();
