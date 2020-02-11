@@ -105,6 +105,24 @@ var speed = 0.3;
 var goingLeft = false;
 var goingRight = false;
 
+//button start
+var button = document.createElement('button');
+button.type="button";
+button.innerText = "START";
+button.style.position = "absolute";
+button.style.top = 0 + '%';
+button.style.left = 0 + '%';
+button.style.zIndex = 10;
+button.style.width = "100%"
+button.style.height = "100%"
+button.style.fontSize = "200px"
+button.onclick = function(){
+    gameStarted = true;
+    button.hidden = true;
+}
+
+document.body.appendChild(button);
+
 //game logic
 var update = function(){
     if(gameStarted){
@@ -118,19 +136,6 @@ var update = function(){
         }
         if(goingRight){
             person.position.x += speed;
-        }
-    }
-    if(detectCollisionCubes(person, hurdle)){
-        gameStarted = false;
-
-        soundLoose.play();
-        soundLoose.onended = () => { 
-            soundHaha.play(); 
-            text2.style.zIndex = "1";
-            score = 0;
-            textscore.innerHTML = score;
-            person.position.z = 0;
-            camera.position.z = 9;
         }
     }
     hurdles.forEach(hurdle => {
