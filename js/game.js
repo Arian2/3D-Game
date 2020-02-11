@@ -79,6 +79,7 @@ text2.innerHTML = "Press ENTER to start!";
 text2.style.fontSize = 50 + "px";
 text2.style.top = 50 + '%';
 text2.style.left = 40 + '%';
+text2.style.zIndex = "1";
 document.body.appendChild(text2);
 //text score
 var score = 0;
@@ -121,12 +122,11 @@ var update = function(){
     }
     if(detectCollisionCubes(person, hurdle)){
         gameStarted = false;
-        soundLoose.autoplay = true;
-        soundLoose.loop = true;
+
         soundLoose.play();
         soundLoose.onended = () => { 
             soundHaha.play(); 
-            document.body.appendChild(text2);
+            text2.style.zIndex = "1";
             score = 0;
             textscore.innerHTML = score;
             person.position.z = 0;
@@ -139,7 +139,7 @@ var update = function(){
             soundLoose.play();
             soundLoose.onended = () => { 
                 soundHaha.play(); 
-                document.body.appendChild(text2);
+                text2.style.zIndex = "1";
                 score = 0;
                 textscore.innerHTML = score;
                 person.position.z = 0;
@@ -161,6 +161,8 @@ var GameLoop = function(){
     render();
 };
 
+GameLoop();
+
 //key down event
 document.addEventListener("keydown", event => {
     if (event.key === "ArrowLeft") {
@@ -178,9 +180,9 @@ document.addEventListener("keydown", event => {
         }
     }
     if(event.key === "Enter" || event.key === " "){
-        if(document.body.removeChild(text2)){
-
-        };
+        if(text2.style.zIndex === "1"){
+            text2.style.zIndex = "-1";
+        }
         gameStarted = true;
     }
   });
@@ -194,32 +196,21 @@ document.addEventListener("keydown", event => {
 
   });
 
-document.addEventListener('touchmove', event => {
+document.addEventListener('touchstart', event => {
     if(gameStarted === true){
         if(event.touches[0].clientX < window.outerWidth && person.position.x > -5){
-            goingLeft = true;
-        }else{
-            goingLeft = false;
+            person.position.x -= 2;
         }
         if(event.touches[0].clientX > window.outerWidth && person.position.x < 5){
-            goingRight = true;
-        }else{
-            goingRight = false;
+            person.position.x += 2;
         }
     }else{
-        document.body.removeChild(text2);
-        gameStarted = true;
+        if(text2.style.zIndex === "1"){
+            gameStarted = true
+            text2.style.zIndex = "-1";
+        }
     }
 },false);
-document.addEventListener('touchend', event => {
-    if(gameStarted === true){
-        goingLeft = false;
-        goingRight = false;
-    }
-},false);
-
-GameLoop();
-
 
 //true if two object collide
 function detectCollisionCubes(object1, object2){
