@@ -63,7 +63,7 @@ var geometry = new THREE.BoxGeometry(4, 2, 2);
 var material = new THREE.MeshLambertMaterial( { color: 0xff0000, wireframe: false } );
 
 var hurdles = [];
-for(var i = 5;i<1000; i++){
+for(var i = 5;i<100; i++){
     var hurdle = new THREE.Mesh(geometry, material);
     hurdle.position.x = Math.random() * 40 - 20;
     hurdle.position.y = person.geometry.parameters.height / 2;
