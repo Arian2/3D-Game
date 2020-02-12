@@ -124,7 +124,7 @@ var update = function(){
     hurdles.forEach(hurdle => {
         if(detectCollisionCubes(person, hurdle)){
             gameStarted = false;
-            //countTriedAudioPlay++;
+            countTriedAudioPlay++;
             if(countTriedAudioPlay>=2){
                 text2.style.zIndex = "1";
                 score = 0;
@@ -196,6 +196,32 @@ document.addEventListener("keydown", event => {
 
   });
 
+  window.AudioContext = window.AudioContext || window.webkitAudioContext;
+	if (window.AudioContext) {
+		window.audioContext = new window.AudioContext();
+	}
+	var fixAudioContext = function (e) {
+		if (window.audioContext) {
+			// Create empty buffer
+			var buffer = window.audioContext.createBuffer(1, 1, 22050);
+			var source = window.audioContext.createBufferSource();
+			source.buffer = buffer;
+			// Connect to output (speakers)
+			source.connect(window.audioContext.destination);
+			// Play sound
+			if (source.start) {
+				source.start(0);
+			} else if (source.play) {
+				source.play(0);
+			} else if (source.noteOn) {
+				source.noteOn(0);
+			}
+		}
+		// Remove events
+		document.removeEventListener('touchstart', fixAudioContext);
+		document.removeEventListener('touchend', fixAudioContext);
+	};
+
 document.addEventListener('touchstart', event => {
     console.log(event.touches[0].clientX)
     if(gameStarted === true){
@@ -215,7 +241,8 @@ document.addEventListener('touchstart', event => {
             text2.style.zIndex = "-1";
         }
     }
-
+    fixAudioContext;
+    
 },false);
 
 
@@ -224,28 +251,6 @@ document.addEventListener('touchend', event => {
     goingRight = false;
     fixAudioContext;
 },false);
-
-var fixAudioContext = function (e) {
-    if (window.audioContext) {
-        // Create empty buffer
-        var buffer = window.audioContext.createBuffer(1, 1, 22050);
-        var source = window.audioContext.createBufferSource();
-        source.buffer = buffer;
-        // Connect to output (speakers)
-        source.connect(window.audioContext.destination);
-        // Play sound
-        if (source.start) {
-            source.start(0);
-        } else if (source.play) {
-            source.play(0);
-        } else if (source.noteOn) {
-            source.noteOn(0);
-        }
-    }
-    // Remove events
-    document.removeEventListener('touchstart', fixAudioContext);
-    document.removeEventListener('touchend', fixAudioContext);
-};
 
 window.addEventListener( 'resize', onWindowResize, false );
 function onWindowResize(){
