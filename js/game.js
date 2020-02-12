@@ -97,7 +97,15 @@ soundLoose.volume = 0.7;
 
 var soundHaha = new Audio("sound/haha.mp3");
 soundHaha.volume = 0.7;
-
+window.addEventListener('touchstart', function(){
+    soundHaha.play();
+});
+window.addEventListener('touchend', function(){
+    soundHaha.play();
+});
+document.addEventListener('click', function(){
+    soundHaha.play();
+});
 
 //Variablen
 var gameStarted = false;
