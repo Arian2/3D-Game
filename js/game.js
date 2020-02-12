@@ -221,6 +221,11 @@ document.addEventListener('touchend', event => {
     goingRight = false;
 },false);
 
+window.addEventListener( 'resize', onWindowResize, false );
+function onWindowResize(){
+    renderer.setSize( window.innerWidth, window.innerHeight );
+}
+
 
 //true if two object collide
 function detectCollisionCubes(object1, object2){
