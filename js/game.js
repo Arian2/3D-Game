@@ -220,7 +220,11 @@ document.addEventListener("keydown", event => {
 		// Remove events
 		document.removeEventListener('touchstart', fixAudioContext);
 		document.removeEventListener('touchend', fixAudioContext);
-	};
+    };
+    	// iOS 6-8
+	document.addEventListener('touchstart', fixAudioContext);
+	// iOS 9
+	document.addEventListener('touchend', fixAudioContext);
 
 document.addEventListener('touchstart', event => {
     console.log(event.touches[0].clientX)
@@ -241,7 +245,7 @@ document.addEventListener('touchstart', event => {
             text2.style.zIndex = "-1";
         }
     }
-    fixAudioContext;
+
     
 },false);
 
@@ -249,7 +253,7 @@ document.addEventListener('touchstart', event => {
 document.addEventListener('touchend', event => {
     goingLeft = false;
     goingRight = false;
-    fixAudioContext;
+
 },false);
 
 window.addEventListener( 'resize', onWindowResize, false );
