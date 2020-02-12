@@ -131,16 +131,17 @@ var update = function(){
                 textscore.innerHTML = score;
                 person.position.z = 0;
                 camera.position.z = 9;
-            }
-            soundLoose.play();
-            soundLoose.onended = () => { 
-                soundHaha.play(); 
-                countTriedAudioPlay=0
-                text2.style.zIndex = "1";
-                score = 0;
-                textscore.innerHTML = score;
-                person.position.z = 0;
-                camera.position.z = 9;
+            }else{
+                soundLoose.play();
+                soundLoose.onended = () => { 
+                    soundHaha.play(); 
+                    countTriedAudioPlay=0
+                    text2.style.zIndex = "1";
+                    score = 0;
+                    textscore.innerHTML = score;
+                    person.position.z = 0;
+                    camera.position.z = 9;
+                }
             }
         }
     });
@@ -194,12 +195,17 @@ document.addEventListener("keydown", event => {
   });
 
 document.addEventListener('touchstart', event => {
+    console.log(event.touches[0].clientX)
     if(gameStarted === true){
-        if(event.touches[0].clientX < window.outerWidth && person.position.x > -5){
-            person.position.x -= 2;
+        if(event.touches[0].clientX < window.outerWidth/2 && person.position.x > -10){
+            goingLeft = true;
+        }else{
+            goingLeft = false;
         }
-        if(event.touches[0].clientX > window.outerWidth && person.position.x < 5){
-            person.position.x += 2;
+        if(event.touches[0].clientX > window.outerWidth/2 && person.position.x < 10){
+            goingRight = true;
+        }else{
+            goingRight = false;
         }
     }else{
         if(text2.style.zIndex === "1"){
@@ -208,6 +214,13 @@ document.addEventListener('touchstart', event => {
         }
     }
 },false);
+
+
+document.addEventListener('touchend', event => {
+    goingLeft = false;
+    goingRight = false;
+},false);
+
 
 //true if two object collide
 function detectCollisionCubes(object1, object2){
