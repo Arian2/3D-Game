@@ -124,15 +124,15 @@ var update = function(){
     hurdles.forEach(hurdle => {
         if(detectCollisionCubes(person, hurdle)){
             gameStarted = false;
-            countTriedAudioPlay++;
-            if(countTriedAudioPlay>=2){
+            //countTriedAudioPlay++;
+            //if(countTriedAudioPlay>=2){
                 text2.style.zIndex = "1";
                 score = 0;
                 textscore.innerHTML = score;
                 person.position.x = 0;
                 person.position.z = 0;
                 camera.position.z = 9;
-            }else{
+            /*}else{
                 soundLoose.play();
                 soundLoose.onended = () => { 
                     soundHaha.play(); 
@@ -144,7 +144,7 @@ var update = function(){
                     person.position.z = 0;
                     camera.position.z = 9;
                 }
-            }
+            }*/
         }
     });
 };
