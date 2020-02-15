@@ -63,7 +63,7 @@ var geometry = new THREE.BoxGeometry(4, 2, 2);
 var material = new THREE.MeshLambertMaterial( { color: 0xff0000, wireframe: false } );
 
 var hurdles = [];
-for(var i = 5;i<100; i++){
+for(var i = 5;i<1000; i++){
     var hurdle = new THREE.Mesh(geometry, material);
     hurdle.position.x = Math.random() * 40 - 20;
     hurdle.position.y = person.geometry.parameters.height / 2;
@@ -126,13 +126,13 @@ var update = function(){
             gameStarted = false;
             //countTriedAudioPlay++;
             //if(countTriedAudioPlay>=2){
-                text2.style.zIndex = "1";
+               /* text2.style.zIndex = "1";
                 score = 0;
                 textscore.innerHTML = score;
                 person.position.x = 0;
                 person.position.z = 0;
-                camera.position.z = 9;
-            /*}else{
+                camera.position.z = 9; */
+            //}else{
                 soundLoose.play();
                 soundLoose.onended = () => { 
                     soundHaha.play(); 
@@ -144,7 +144,7 @@ var update = function(){
                     person.position.z = 0;
                     camera.position.z = 9;
                 }
-            }*/
+            //}
         }
     });
 };
@@ -165,14 +165,14 @@ GameLoop();
 
 //key down event
 document.addEventListener("keydown", event => {
-    if (event.key === "ArrowLeft") {
+    if (event.key === "ArrowLeft" || event.key === "a") {
         if(person.position.x > -10){
             goingLeft = true;
         }else{
             goingLeft = false;
         } 
     }
-    if(event.key === "ArrowRight"){
+    if(event.key === "ArrowRight" || event.key === "d"){
         if(person.position.x < 10){
             goingRight = true;
         }else{
@@ -187,10 +187,10 @@ document.addEventListener("keydown", event => {
     }
   });
   document.addEventListener("keyup", event => {
-    if (event.key === "ArrowLeft") {
+    if (event.key === "ArrowLeft" || event.key === "a") {
         goingLeft = false;
     }
-    if(event.key === "ArrowRight"){
+    if(event.key === "ArrowRight" || event.key === "d"){
         goingRight = false;
     }
 
