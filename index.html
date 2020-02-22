@@ -9,7 +9,61 @@
 		</style>
 	</head>
 	<body >
-        <script src="js/three.js"></script>
-		<script src="js/game.js"></script>    
+		<div id="highscore" style="position: absolute; font-size: 100%; top: 0px; left: 2%;">
+			<h1 style="margin: 0px">Highscore</h1>
+		</div>
+
+		<input hidden style="margin-top: 300px;" type="text" placeholder="name" id="nameField">
+		<button hidden id="btnHighscore">Submit</button>
+
+		<!-- The core Firebase JS SDK is always required and must be listed first -->
+		<script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+
+		<!-- TODO: Add SDKs for Firebase products that you want to use
+			https://firebase.google.com/docs/web/setup#available-libraries -->
+		<script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-analytics.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-auth.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-database.js"></script>
+
+		<script>
+			// Your web app's Firebase configuration
+			var firebaseConfig = {
+				apiKey: "AIzaSyAY9PTBQ0gnOahl7Ugk8SZfK5LdNIbww90",
+				authDomain: "d-dodge-game.firebaseapp.com",
+				databaseURL: "https://d-dodge-game.firebaseio.com",
+				projectId: "d-dodge-game",
+				storageBucket: "d-dodge-game.appspot.com",
+				messagingSenderId: "828274992452",
+				appId: "1:828274992452:web:0de419942e70c749206311",
+				measurementId: "G-F0QWS7XM30"
+			};
+			// Initialize Firebase
+			firebase.initializeApp(firebaseConfig);
+			firebase.analytics();
+
+			
+			var counter = 0;
+			function getData(){
+				firebase.database().ref('/Highscore').once('value', function(snapshot){
+					snapshot.forEach(function(childSnapshot){
+						counter++;
+						var childKey = childSnapshot.key;
+						var childData = childSnapshot.val();
+						var highscore = document.createElement('p');
+						highscore.style.margin = "0px";
+
+						highscore.id = counter;
+						highscore.innerHTML = counter + ". " + childData['name'] + ", " + childData['score'];
+						document.getElementById("highscore").appendChild(highscore);
+					})
+				});
+				counter = 0;
+			}
+			getData();
+		</script>
+
+		<script src="js/three.js"></script>
+		<script src="js/game.js"></script>
+
 	</body>
 </html>

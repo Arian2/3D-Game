@@ -104,10 +104,28 @@ var gameStarted = false;
 var speed = 0.3;
 var goingLeft = false;
 var goingRight = false;
-var countTriedAudioPlay = 0;
 
 //game logic
 var update = function(){
+    if(gameStarted){
+        hurdles.forEach(hurdle => {
+            if(detectCollisionCubes(person, hurdle)){ //wenn man kollidiert/verloren hat
+                addNewHighscore(score);
+                gameStarted = false;
+                soundLoose.play();
+                soundLoose.onended = () => { 
+                    soundHaha.play(); 
+                    countTriedAudioPlay=0
+                    text2.style.zIndex = "1";
+                    score = 0;
+                    textscore.innerHTML = score;
+                    person.position.x = 0;
+                    person.position.z = 0;
+                    camera.position.z = 9;
+                }
+            }
+        });
+    }
     if(gameStarted){
         score += 10;
         textscore.innerHTML = score;
@@ -121,32 +139,6 @@ var update = function(){
             person.position.x += speed;
         }
     }
-    hurdles.forEach(hurdle => {
-        if(detectCollisionCubes(person, hurdle)){
-            gameStarted = false;
-            //countTriedAudioPlay++;
-            //if(countTriedAudioPlay>=2){
-               /* text2.style.zIndex = "1";
-                score = 0;
-                textscore.innerHTML = score;
-                person.position.x = 0;
-                person.position.z = 0;
-                camera.position.z = 9; */
-            //}else{
-                soundLoose.play();
-                soundLoose.onended = () => { 
-                    soundHaha.play(); 
-                    countTriedAudioPlay=0
-                    text2.style.zIndex = "1";
-                    score = 0;
-                    textscore.innerHTML = score;
-                    person.position.x = 0;
-                    person.position.z = 0;
-                    camera.position.z = 9;
-                }
-            //}
-        }
-    });
 };
 
 //draw scene
@@ -197,7 +189,6 @@ document.addEventListener("keydown", event => {
   });
 
 document.addEventListener('touchstart', event => {
-    console.log(event.touches[0].clientX)
     if(gameStarted === true){
         if(event.touches[0].clientX < window.outerWidth/2 && person.position.x > -10){
             goingLeft = true;
@@ -244,3 +235,45 @@ function detectCollisionCubes(object1, object2){
 
     return box1.intersectsBox(box2);
   }
+
+//get new Highscore place
+function addNewHighscore(newScore){
+    firebase.database().ref("/Highscore").once("value", function(snapshot){
+        snapshot.forEach(function(childSnapshot){
+            var childKey = childSnapshot.key;
+            var childData = childSnapshot.val();
+            var highscore = childData.score;
+            if(newScore > parseInt(highscore) ){
+                //document.getElementById("nameField").hidden = false;
+                //document.getElementById("btnHighscore").hidden = false;
+                document.getElementById("btnHighscore").onclick = function(){ writeData(childKey, newScore) };
+                var person = prompt("Enter Name to save Highscore", "");
+                if (person != null) {
+                    writeData(childKey, person, newScore);
+                }
+
+                return true;
+            }
+        });
+    });
+    return false;
+}
+
+function writeData(childKey, name, newScore){
+    firebase.database().ref("Highscore/"+ childKey).set({
+        name: name,
+        score: newScore
+    });
+
+    //document.getElementById("nameField").hidden = true;
+    //document.getElementById("btnHighscore").hidden = true;
+
+    
+    
+    document.getElementById('1').remove();
+    document.getElementById('2').remove();
+    document.getElementById('3').remove();
+    document.getElementById('4').remove();
+    document.getElementById('5').remove();
+    getData();
+}
