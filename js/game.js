@@ -3,7 +3,7 @@ scene.background = new THREE.Color(0xffffff);
 scene.fog = new THREE.Fog(0xffffff, 0, 200);
 
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-camera.position.x = -1.2;
+camera.position.x = 0;
 camera.position.y = 5.6;
 camera.position.z = 9.0;
 camera.rotation.x = -0.2;
@@ -244,9 +244,6 @@ function addNewHighscore(newScore){
             var childData = childSnapshot.val();
             var highscore = childData.score;
             if(newScore > parseInt(highscore) ){
-                //document.getElementById("nameField").hidden = false;
-                //document.getElementById("btnHighscore").hidden = false;
-                document.getElementById("btnHighscore").onclick = function(){ writeData(childKey, newScore) };
                 var person = prompt("Enter Name to save Highscore", "");
                 if (person != null) {
                     writeData(childKey, person, newScore);
@@ -264,11 +261,6 @@ function writeData(childKey, name, newScore){
         name: name,
         score: newScore
     });
-
-    //document.getElementById("nameField").hidden = true;
-    //document.getElementById("btnHighscore").hidden = true;
-
-    
     
     document.getElementById('1').remove();
     document.getElementById('2').remove();
