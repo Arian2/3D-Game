@@ -19,7 +19,7 @@ directionalLight.ambient = 0;
 scene.add( directionalLight );
 
 //floor
-var geo = new THREE.PlaneBufferGeometry(2000, 2000, 80, 80);
+var geo = new THREE.PlaneBufferGeometry(200, 200, 80, 80);
 geo.rotateX( -Math.PI / 2 );
 
 var vertex = new THREE.Vector3();
@@ -63,7 +63,7 @@ var geometry = new THREE.BoxGeometry(4, 2, 2);
 var material = new THREE.MeshLambertMaterial( { color: 0xff0000, wireframe: false } );
 
 var hurdles = [];
-for(var i = 5;i<1000; i++){
+for(var i = 5;i<10000; i++){
     var hurdle = new THREE.Mesh(geometry, material);
     hurdle.position.x = Math.random() * 40 - 20;
     hurdle.position.y = person.geometry.parameters.height / 2;
@@ -93,10 +93,10 @@ document.body.appendChild(textscore);
 
 //sound
 var soundLoose = new Audio("sound/loose.mp3");
-soundLoose.volume = 0.7;
+soundLoose.volume = 0.25;
 
 var soundHaha = new Audio("sound/haha.mp3");
-soundHaha.volume = 0.7;
+soundHaha.volume = 0.25;
 
 
 //Variablen
@@ -114,15 +114,15 @@ var update = function(){
                 gameStarted = false;
                 soundLoose.play();
                 soundLoose.onended = () => { 
-                    soundHaha.play(); 
-                    countTriedAudioPlay=0
-                    text2.style.zIndex = "1";
-                    score = 0;
-                    textscore.innerHTML = score;
-                    person.position.x = 0;
-                    person.position.z = 0;
-                    camera.position.z = 9;
+                    soundHaha.play();
                 }
+                countTriedAudioPlay=0
+                text2.style.zIndex = "1";
+                score = 0;
+                textscore.innerHTML = score;
+                person.position.x = 0;
+                person.position.z = 0;
+                camera.position.z = 9;
             }
         });
     }
@@ -157,14 +157,14 @@ GameLoop();
 
 //key down event
 document.addEventListener("keydown", event => {
-    if (event.key === "ArrowLeft" || event.key === "a") {
+    if (event.key === "ArrowLeft" || event.key.toLowerCase() === "a") {
         if(person.position.x > -10){
             goingLeft = true;
         }else{
             goingLeft = false;
         } 
     }
-    if(event.key === "ArrowRight" || event.key === "d"){
+    if(event.key === "ArrowRight" || event.key.toLowerCase() === "d"){
         if(person.position.x < 10){
             goingRight = true;
         }else{
@@ -179,10 +179,10 @@ document.addEventListener("keydown", event => {
     }
   });
   document.addEventListener("keyup", event => {
-    if (event.key === "ArrowLeft" || event.key === "a") {
-        goingLeft = false;
+    if (event.key === "ArrowLeft" || event.key.toLowerCase() === "a") {
+        goingLeft = false; debugger;
     }
-    if(event.key === "ArrowRight" || event.key === "d"){
+    if(event.key === "ArrowRight" || event.key.toLowerCase() === "d"){
         goingRight = false;
     }
 
